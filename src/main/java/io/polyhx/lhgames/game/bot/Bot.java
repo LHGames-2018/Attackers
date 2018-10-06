@@ -29,7 +29,7 @@ public class Bot extends BaseBot {
         }
     	if(goHouseUrgent) {
     		move = goToHouse(player,map);
-    		if()
+    		
     	}else {
     		 if(full) {
     	        	
