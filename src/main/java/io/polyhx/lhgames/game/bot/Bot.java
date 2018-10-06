@@ -129,43 +129,15 @@ public class Bot extends BaseBot {
     	int deltaX = player.getHousePosition().getX() - player.getPosition().getX();
     	int deltaY = player.getHousePosition().getY() - player.getPosition().getY();
     	if(deltaX < 0 ) {
-    		if(map.getTileLeftOf(player.getPosition()).isResource()) {
-    			if(deltaY > 0) {
-    				return move(Point.DOWN,player,map);
-    			}else {
-    				return move(Point.UP,player,map);
-    			}
-    		}
     		return move(Point.LEFT,player,map);
     	}
     	if(deltaX > 0) {
-    		if(map.getTileRightOf(player.getPosition()).isResource()) {
-    			if(deltaY > 0) {
-    				return move(Point.DOWN,player,map);
-    			}else {
-    				return move(Point.UP,player,map);
-    			}
-    		}
     		return move(Point.RIGHT,player,map);
     	}
     	if(deltaY < 0) {
-    		if(map.getTileAboveOf(player.getPosition()).isResource()) {
-    			if(deltaX < 0) {
-    				return move(Point.LEFT,player,map);
-    			}else {
-    				return move(Point.RIGHT,player,map);
-    			}
-    		}
     		return move(Point.UP,player,map);
     	}
     	if( deltaY > 0) {
-    		if(map.getTileBelowOf(player.getPosition()).isResource()) {
-    			if(deltaX < 0) {
-    				return move(Point.LEFT,player,map);
-    			}else {
-    				return move(Point.RIGHT,player,map);
-    			}
-    		}
     		return move(Point.DOWN,player,map);
     	} else {
     		return null;
