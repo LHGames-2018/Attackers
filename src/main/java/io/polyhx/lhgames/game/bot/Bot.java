@@ -109,12 +109,15 @@ public class Bot extends BaseBot {
     	// if vide -> walk
     	
     	if(nextTile.isEmpty() || nextTile.isHouse()) {
-    		return createMoveAction(dir);
+    		return createMeleeAttackAction(dir);
     	} 
     	if(nextTile.isWall() || nextTile.isPlayer()) {
     		return createMeleeAttackAction(dir);
     	}
     	
+    	if(nextTile.isResource()) {
+    		return createCollectAction(dir);
+    	}
     		return createMeleeAttackAction(dir);
     	
     	

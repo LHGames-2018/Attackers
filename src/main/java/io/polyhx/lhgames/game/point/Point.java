@@ -84,4 +84,8 @@ public class Point implements IPoint {
     public int getY() {
         return fY;
     }
+    
+    public boolean equals(Point other) {
+    	return (this.fX == other.fX && this.fY == other.fY);
+    }
 }
