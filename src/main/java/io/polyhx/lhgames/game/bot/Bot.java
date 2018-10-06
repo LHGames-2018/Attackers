@@ -10,6 +10,7 @@ import io.polyhx.lhgames.game.action.MoveAction;
 import io.polyhx.lhgames.game.point.Point;
 import io.polyhx.lhgames.game.tile.ResourceTile;
 import io.polyhx.lhgames.game.tile.Tile;
+import io.polyhx.lhgames.game.tile.TileContent;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class Bot extends BaseBot {
         boolean full = true;
         AbstractPointAction move = createMoveAction(Point.UP);
         if(player.getCarriedResource() < player.getResourceCapacity()) {
-        	full = true;
+        	full = false;
         }
     	
         if(full) {
@@ -98,6 +99,8 @@ public class Bot extends BaseBot {
     	
     	if(nextTile.isEmpty()) {
     		return createMoveAction(dir);
+    	}else if(nextTile.isWall()) {
+    		return createMelee
     	}
     	
     	// get the type of tile
