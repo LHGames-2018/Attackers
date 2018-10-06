@@ -99,8 +99,8 @@ public class Bot extends BaseBot {
     	
     	if(nextTile.isEmpty()) {
     		return createMoveAction(dir);
-    	}else if(nextTile.isWall()) {
-    		return createMelee
+    	}else if(nextTile.isWall() || nextTile.isPlayer()) {
+    		return createMeleeAttackAction(dir);
     	}
     	
     	// get the type of tile
