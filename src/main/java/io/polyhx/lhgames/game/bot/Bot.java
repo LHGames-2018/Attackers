@@ -9,6 +9,7 @@ import io.polyhx.lhgames.game.action.IAction;
 import io.polyhx.lhgames.game.action.MoveAction;
 import io.polyhx.lhgames.game.point.Point;
 import io.polyhx.lhgames.game.tile.ResourceTile;
+import io.polyhx.lhgames.game.tile.Tile;
 
 import java.util.List;
 
@@ -21,12 +22,13 @@ public class Bot extends BaseBot {
         boolean full = true;
         AbstractPointAction move = createMoveAction(Point.UP);
         if(player.getCarriedResource() < player.getResourceCapacity()) {
-        	full = false;
+        	full = true;
         }
     	
         if(full) {
         	
-        	move = goToHouse(player);
+        	move = goToHouse(player,map);
+        	
         }else {
         	move = goToNearestMineral(player,map);
         }
@@ -57,16 +59,16 @@ public class Bot extends BaseBot {
     		int distY = nearest.getPosition().getY() - player.getPosition().getY();
     		
     		if(distX < 0 ) {
-        		return createMoveAction(Point.LEFT);
+        		return move(Point.LEFT,player,map);
         	}
         	if(distX > 0) {
-        		return createMoveAction(Point.RIGHT);
+        		return move(Point.RIGHT,player,map);
         	}
         	if(distY < 0) {
-        		return createMoveAction(Point.UP);
+        		return move(Point.UP,player,map);
         	}
         	if( distY > 0) {
-        		return createMoveAction(Point.DOWN);
+        		return move(Point.DOWN,player,map);
         	} else {
         		return null;
         	}
@@ -76,21 +78,33 @@ public class Bot extends BaseBot {
     	
     	
     }
-    public AbstractPointAction goToHouse(Player player) {
+    
+    public AbstractPointAction move(Point dir,Player player,Map map) {
+    	// if vide -> walk
+    	//if tree -> attack
+    	//if guy -> attack
+    	Tile nextTile;
+    	if(dir.equals(Point.UP)) {
+    		//nextTile = 
+    	}
+    	//if()
+    	return createMoveAction(dir);
+    }
+    public AbstractPointAction goToHouse(Player player,Map map) {
     	
     	int deltaX = player.getHousePosition().getX() - player.getPosition().getX();
     	int deltaY = player.getHousePosition().getY() - player.getPosition().getY();
     	if(deltaX < 0 ) {
-    		return createMoveAction(Point.LEFT);
+    		return move(Point.LEFT,player,map);
     	}
     	if(deltaX > 0) {
-    		return createMoveAction(Point.RIGHT);
+    		return move(Point.RIGHT,player,map);
     	}
     	if(deltaY < 0) {
-    		return createMoveAction(Point.UP);
+    		return move(Point.UP,player,map);
     	}
     	if( deltaY > 0) {
-    		return createMoveAction(Point.DOWN);
+    		return move(Point.DOWN,player,map);
     	} else {
     		return null;
     	}
