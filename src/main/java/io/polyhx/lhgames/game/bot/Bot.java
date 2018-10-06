@@ -15,8 +15,8 @@ public class Bot extends BaseBot {
 	boolean full = false;
 	boolean goingHome = false;
 	int xMovedH = 0;
-	int yMovedH = 0;
 	int xMoved = 0;
+	int yMoved = 0;
 	
 	int xMaxHome = 7;
 
@@ -26,12 +26,12 @@ public class Bot extends BaseBot {
 			
     public IAction getAction(Map map, Player player, List<Player> others, GameInfo info) {
         // get to house
-    /*	if(!gotHouse) {
+    	if(!gotToHouse) {
     		if(xMovedH < xMaxHome) {
     			xMovedH++;
         		return createMoveAction(Point.LEFT);
     		}else {
-    			gotHouse = true;
+    			gotToHouse = true;
     		}
     		
     	}else {
@@ -41,31 +41,23 @@ public class Bot extends BaseBot {
     			return createMoveAction(Point.LEFT);
     		}else if(yMoved < yMax){
     			yMoved ++ ;
-    			return createMoveAction(Point.UP);
+    			return createMoveAction(Point.DOWN);
     		}else {
     			// arrive au mineraix
-    			if(player.resourceCurrent >= player.resourceCapacity) {
+    			if(player.getCarriedResource() == player.getResourceCapacity()) {
     				goingHome = true;
     			}else {
-    				return creatCollectAction(Point.UP);
+    				return createCollectAction(Point.UP);
     			}
     			
     		}
     	}
     	
-    	*/
-    	return createMoveAction(Point.RIGHT);
+    	
+    	return createMoveAction(null);
     }
     
     
-   // public Point nextMove() {
-    	
-    	
-    //	Point move;
-    	
-    //	return move;
-    	
-    	
-    //}
+  
     
 }
