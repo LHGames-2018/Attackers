@@ -29,6 +29,7 @@ public class Bot extends BaseBot {
         if(full) {
         	
         	move = goToHouse(player,map);
+        	full = false;
         	
         }else {
         	move = goToNearestMineral(player,map);
@@ -85,6 +86,7 @@ public class Bot extends BaseBot {
     	//if tree -> attack
     	//if guy -> attack
     	Tile nextTile = map.getTileAboveOf(player.getPosition());
+    	
     	if(dir.equals(Point.UP)) {
     		nextTile = map.getTileAboveOf(player.getPosition());
     	}else if(dir.equals(Point.DOWN)) {
@@ -129,6 +131,8 @@ public class Bot extends BaseBot {
     	}
     	
     }
+    
+    
     
   
     
