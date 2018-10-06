@@ -3,60 +3,99 @@ package io.polyhx.lhgames.game.bot;
 import io.polyhx.lhgames.game.GameInfo;
 import io.polyhx.lhgames.game.Map;
 import io.polyhx.lhgames.game.Player;
+import io.polyhx.lhgames.game.action.AbstractPointAction;
+import io.polyhx.lhgames.game.action.ActionType;
 import io.polyhx.lhgames.game.action.IAction;
+import io.polyhx.lhgames.game.action.MoveAction;
 import io.polyhx.lhgames.game.point.Point;
+import io.polyhx.lhgames.game.tile.ResourceTile;
 
 import java.util.List;
 
 public class Bot extends BaseBot {
 	
-	Point coordMinerais = new Point();
-	boolean gotToHouse;
-	boolean full = false;
-	boolean goingHome = false;
-	int xMovedH = 0;
-	int xMoved = 0;
-	int yMoved = 0;
-	
-	int xMaxHome = 7;
 
-	int xMax = 3;
-	int yMax = 2;
 	
 			
     public IAction getAction(Map map, Player player, List<Player> others, GameInfo info) {
-        // get to house
-    	if(!gotToHouse) {
-    		if(xMovedH < xMaxHome) {
-    			xMovedH++;
-        		return createMoveAction(Point.LEFT);
-    		}else {
-    			gotToHouse = true;
-    		}
-    		
-    	}else {
-    		// premiere etape done amene au minerais
-    		if(xMoved < xMax) {
-    			xMoved++;
-    			return createMoveAction(Point.LEFT);
-    		}else if(yMoved < yMax){
-    			yMoved ++ ;
-    			return createMoveAction(Point.DOWN);
-    		}else {
-    			// arrive au mineraix
-    			if(player.getCarriedResource() == player.getResourceCapacity()) {
-    				goingHome = true;
-    			}else {
-    				return createCollectAction(Point.UP);
-    			}
+        boolean full = true;
+        AbstractPointAction move = createMoveAction(Point.UP);
+        if(player.getCarriedResource() < player.getResourceCapacity()) {
+        	full = false;
+        }
+    	
+        if(full) {
+        	
+        	move = goToHouse(player);
+        }else {
+        	move = goToNearestMineral(player,map);
+        }
+    	
+    	return move;
+    }
+    
+    public AbstractPointAction goToNearestMineral(Player player, Map map) {
+    	// find nearest tile
+    	double distMin = 1000;
+    	ResourceTile nearest = null;
+    	for(ResourceTile resource : map.getResources() ) {
+    		if(resource.getDistanceTo(player.getPosition()) < distMin) {
+    			nearest = resource;
+    			distMin = resource.getDistanceTo(player.getPosition());
     			
     		}
+    		
+    	}
+    	
+    	// if mineral a coter, alors miner
+    	
+    	if(distMin == 1.0) {
+    		return createCollectAction(new Point(nearest.getPosition().getX() - player.getPosition().getX(),nearest.getPosition().getY() - player.getPosition().getY()));
+    	}else {
+    		// move
+    		int distX = nearest.getPosition().getX() - player.getPosition().getX();
+    		int distY = nearest.getPosition().getY() - player.getPosition().getY();
+    		
+    		if(distX < 0 ) {
+        		return createMoveAction(Point.LEFT);
+        	}
+        	if(distX > 0) {
+        		return createMoveAction(Point.RIGHT);
+        	}
+        	if(distY < 0) {
+        		return createMoveAction(Point.UP);
+        	}
+        	if( distY > 0) {
+        		return createMoveAction(Point.DOWN);
+        	} else {
+        		return null;
+        	}
+    		
+    		
     	}
     	
     	
-    	return createMoveAction(null);
     }
-    
+    public AbstractPointAction goToHouse(Player player) {
+    	
+    	int deltaX = player.getHousePosition().getX() - player.getPosition().getX();
+    	int deltaY = player.getHousePosition().getY() - player.getPosition().getY();
+    	if(deltaX < 0 ) {
+    		return createMoveAction(Point.LEFT);
+    	}
+    	if(deltaX > 0) {
+    		return createMoveAction(Point.RIGHT);
+    	}
+    	if(deltaY < 0) {
+    		return createMoveAction(Point.UP);
+    	}
+    	if( deltaX > 0) {
+    		return createMoveAction(Point.DOWN);
+    	} else {
+    		return null;
+    	}
+    	
+    }
     
   
     
