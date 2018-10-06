@@ -23,7 +23,7 @@ public class Bot extends BaseBot {
         boolean full = true;
         AbstractPointAction move = createMoveAction(Point.UP);
         if(player.getCarriedResource() < player.getResourceCapacity()) {
-        	full = true;
+        	full = false;
         }
     	
         if(full) {
