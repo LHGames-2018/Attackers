@@ -89,7 +89,7 @@ public class Bot extends BaseBot {
     	if(deltaY < 0) {
     		return createMoveAction(Point.UP);
     	}
-    	if( deltaX > 0) {
+    	if( deltaY > 0) {
     		return createMoveAction(Point.DOWN);
     	} else {
     		return null;
