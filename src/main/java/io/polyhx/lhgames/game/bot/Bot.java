@@ -26,7 +26,7 @@ public class Bot extends BaseBot {
 			
     public IAction getAction(Map map, Player player, List<Player> others, GameInfo info) {
         // get to house
-    	if(!gotHouse) {
+    /*	if(!gotHouse) {
     		if(xMovedH < xMaxHome) {
     			xMovedH++;
         		return createMoveAction(Point.LEFT);
@@ -53,19 +53,19 @@ public class Bot extends BaseBot {
     		}
     	}
     	
-    	
-    	return createMoveAction(null);
+    	*/
+    	return createMoveAction(Point.RIGHT);
     }
     
     
-    public Point nextMove() {
+   // public Point nextMove() {
     	
     	
-    	Point move;
+    //	Point move;
+    	
+    //	return move;
     	
     	
-    	
-    	
-    }
+    //}
     
 }
