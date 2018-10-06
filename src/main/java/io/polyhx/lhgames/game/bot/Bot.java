@@ -21,7 +21,7 @@ public class Bot extends BaseBot {
 	AbstractPointAction lastMove;
 	
 	
-	boolean modeAttacker = false;
+			
     public IAction getAction(Map map, Player player, List<Player> others, GameInfo info) {
         boolean full = true;
         AbstractPointAction move = createMoveAction(Point.UP);
@@ -132,7 +132,9 @@ public class Bot extends BaseBot {
     		}
     		
     	}
-    	
+    	if(nextTile.isPlayer()) {
+    		return createMeleeAttackAction(dir);
+    	}
     	if(nextTile.isWall()) {
     		return createMeleeAttackAction(dir);
     	}
