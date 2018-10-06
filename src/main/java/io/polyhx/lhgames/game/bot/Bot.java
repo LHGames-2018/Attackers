@@ -3,6 +3,7 @@ import java.util.Random;
 import io.polyhx.lhgames.game.GameInfo;
 import io.polyhx.lhgames.game.Map;
 import io.polyhx.lhgames.game.Player;
+import io.polyhx.lhgames.game.Upgrade;
 import io.polyhx.lhgames.game.action.AbstractPointAction;
 import io.polyhx.lhgames.game.action.ActionType;
 import io.polyhx.lhgames.game.action.IAction;
@@ -15,22 +16,29 @@ import io.polyhx.lhgames.game.tile.TileContent;
 import java.util.List;
 
 public class Bot extends BaseBot {
-	
+	Upgrade upgradeAtt1 = Upgrade.ATTACK;
 
 	AbstractPointAction lastMove;
 	
-	boolean goHouseUrgent = false;
-			
+	
+	boolean modeAttacker = false;
     public IAction getAction(Map map, Player player, List<Player> others, GameInfo info) {
         boolean full = true;
         AbstractPointAction move = createMoveAction(Point.UP);
+        
+        if(player.getTotalResource() > 15000) {
+        	if(player.getAttack() < 3) {
+        		if(player.getPosition().equals(player.getHousePosition())) {
+        			return createUpgradeAction(upgradeAtt1);
+        		}
+        	}
+        }
+        
+        
         if(player.getCarriedResource() < player.getResourceCapacity()) {
         	full = false;
         }
-    	if(goHouseUrgent) {
-    		move = goToHouse(player,map);
-    		
-    	}else {
+    	
     		 if(full) {
     	        	
     	        	move = goToHouse(player,map);
@@ -39,7 +47,7 @@ public class Bot extends BaseBot {
     	        }else {
     	        	move = goToNearestMineral(player,map);
     	        }
-    	}
+    	
        
     	
     	return move;
@@ -95,9 +103,9 @@ public class Bot extends BaseBot {
     	Tile nextTile;
     	
     	if(dir.equals(Point.UP)) {
-    		nextTile = map.getTileAboveOf(player.getPosition());
-    	}else if(dir.equals(Point.DOWN)) {
     		nextTile = map.getTileBelowOf(player.getPosition());
+    	}else if(dir.equals(Point.DOWN)) {
+    		nextTile = map.getTileAboveOf(player.getPosition());
 
     	}else if(dir.equals(Point.RIGHT)) {
     		nextTile = map.getTileRightOf(player.getPosition());
@@ -154,6 +162,25 @@ public class Bot extends BaseBot {
     		return null;
     	}
     	
+    }
+    
+    
+    public Point nearestPlayer(GameInfo gameInfo, Player player) { 
+		int indiceP = 0;
+		int compteur = 0;
+    	for( Player i : gameInfo.getOtherPlayers()) {
+    		 double distNearPlayer = Double.MAX_VALUE;
+    		 
+    		 //
+    		 if(distNearPlayer > Math.sqrt(Math.pow(i.getPosition().getX() - player.getPosition().getX(), 2)) + 
+    				 Math.pow(i.getPosition().getY() - player.getPosition().getY(), 2)){
+    			indiceP = compteur; 
+    		 }
+    		 
+    		 compteur++;
+    		
+    	}
+    	return gameInfo.getOtherPlayers().get(indiceP).getPosition();
     }
     
     
