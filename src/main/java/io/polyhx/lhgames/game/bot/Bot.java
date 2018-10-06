@@ -23,13 +23,13 @@ public class Bot extends BaseBot {
         boolean full = true;
         AbstractPointAction move = createMoveAction(Point.UP);
         if(player.getCarriedResource() < player.getResourceCapacity()) {
-        	full = false;
+        	full = true;
         }
     	
         if(full) {
         	
         	move = goToHouse(player,map);
-        	full = false;
+        
         	
         }else {
         	move = goToNearestMineral(player,map);
@@ -99,9 +99,11 @@ public class Bot extends BaseBot {
     	}
     	// if vide -> walk
     	
-    	if(nextTile.isEmpty()) {
+    	if(nextTile.isEmpty() || nextTile.isHouse()) {
     		return createMoveAction(dir);
     	}else if(nextTile.isWall() || nextTile.isPlayer()) {
+    		return createMeleeAttackAction(dir);
+    	}else {
     		return createMeleeAttackAction(dir);
     	}
     	
@@ -109,7 +111,7 @@ public class Bot extends BaseBot {
     	
     	
     	
-    	return createMoveAction(dir);
+    	//return createMoveAction(dir);
     }
     public AbstractPointAction goToHouse(Player player,Map map) {
     	
