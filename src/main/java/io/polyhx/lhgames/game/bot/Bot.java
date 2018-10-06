@@ -1,5 +1,5 @@
 package io.polyhx.lhgames.game.bot;
-
+import java.util.Random;
 import io.polyhx.lhgames.game.GameInfo;
 import io.polyhx.lhgames.game.Map;
 import io.polyhx.lhgames.game.Player;
@@ -104,34 +104,42 @@ public class Bot extends BaseBot {
     	}else if(dir.equals(Point.LEFT)) {
     		nextTile = map.getTileLeftOf(player.getPosition());
     	}else {
-    		nextTile = map.getTile(player.getPosition());
+    		nextTile = map.getTileAboveOf(player.getPosition());
     	}
     	// if vide -> walk
-    	
-    	if(nextTile.isEmpty() || nextTile.isHouse()) {
-    		return createMeleeAttackAction(dir);
-    	} 
-    	if(nextTile.isWall() || nextTile.isPlayer()) {
-    		return createMeleeAttackAction(dir);
-    	}
-    	
     	if(nextTile.isResource()) {
-    		return createCollectAction(dir);
+    		Random rand = new Random();
+    		
+    		int move = rand.nextInt(5);
+    		
+    		
+    		if(move == 1) {
+    			return createMoveAction(Point.UP);
+    		}else if(move == 2) {
+    			return createMoveAction(Point.DOWN);
+    		}else if(move == 3) {
+    			return createMoveAction(Point.RIGHT);
+    		}else {
+    			return createMoveAction(Point.LEFT);
+    		}
+    		
     	}
+    	
+    	if(nextTile.isWall()) {
     		return createMeleeAttackAction(dir);
+    	}
     	
     	
-    	// get the type of tile
     	
     	
-    	
-    	//return createMoveAction(dir);
+    	return createMoveAction(dir);
     }
     public AbstractPointAction goToHouse(Player player,Map map) {
     	
     	int deltaX = player.getHousePosition().getX() - player.getPosition().getX();
     	int deltaY = player.getHousePosition().getY() - player.getPosition().getY();
-    	if(deltaX < 0 ) {
+    	
+    	if(deltaX < 0) {
     		return move(Point.LEFT,player,map);
     	}
     	if(deltaX > 0) {
@@ -147,6 +155,8 @@ public class Bot extends BaseBot {
     	}
     	
     }
+    
+    
     
     
     
