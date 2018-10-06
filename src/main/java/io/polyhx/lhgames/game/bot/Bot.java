@@ -17,7 +17,9 @@ import java.util.List;
 public class Bot extends BaseBot {
 	
 
+	AbstractPointAction lastMove;
 	
+	boolean goHouseUrgent = false;
 			
     public IAction getAction(Map map, Player player, List<Player> others, GameInfo info) {
         boolean full = true;
@@ -25,15 +27,20 @@ public class Bot extends BaseBot {
         if(player.getCarriedResource() < player.getResourceCapacity()) {
         	full = false;
         }
-    	
-        if(full) {
-        	
-        	move = goToHouse(player,map);
-        
-        	
-        }else {
-        	move = goToNearestMineral(player,map);
-        }
+    	if(goHouseUrgent) {
+    		move = goToHouse(player,map);
+    		if()
+    	}else {
+    		 if(full) {
+    	        	
+    	        	move = goToHouse(player,map);
+    	        
+    	        	
+    	        }else {
+    	        	move = goToNearestMineral(player,map);
+    	        }
+    	}
+       
     	
     	return move;
     }
@@ -53,7 +60,7 @@ public class Bot extends BaseBot {
     	
     	// if mineral a coter, alors miner
     	
-    	if(distMin == 1.0) {
+    	if(distMin <= 1.1) {
     		return createCollectAction(new Point(nearest.getPosition().getX() - player.getPosition().getX(),nearest.getPosition().getY() - player.getPosition().getY()));
     	}else {
     		// move
@@ -85,7 +92,7 @@ public class Bot extends BaseBot {
     	
     	//if tree -> attack
     	//if guy -> attack
-    	Tile nextTile = map.getTileAboveOf(player.getPosition());
+    	Tile nextTile;
     	
     	if(dir.equals(Point.UP)) {
     		nextTile = map.getTileAboveOf(player.getPosition());
@@ -96,16 +103,20 @@ public class Bot extends BaseBot {
     		nextTile = map.getTileRightOf(player.getPosition());
     	}else if(dir.equals(Point.LEFT)) {
     		nextTile = map.getTileLeftOf(player.getPosition());
+    	}else {
+    		nextTile = map.getTile(player.getPosition());
     	}
     	// if vide -> walk
     	
     	if(nextTile.isEmpty() || nextTile.isHouse()) {
     		return createMoveAction(dir);
-    	}else if(nextTile.isWall() || nextTile.isPlayer()) {
-    		return createMeleeAttackAction(dir);
-    	}else {
+    	} 
+    	if(nextTile.isWall() || nextTile.isPlayer()) {
     		return createMeleeAttackAction(dir);
     	}
+    	
+    		return createMeleeAttackAction(dir);
+    	
     	
     	// get the type of tile
     	
@@ -118,15 +129,43 @@ public class Bot extends BaseBot {
     	int deltaX = player.getHousePosition().getX() - player.getPosition().getX();
     	int deltaY = player.getHousePosition().getY() - player.getPosition().getY();
     	if(deltaX < 0 ) {
+    		if(map.getTileLeftOf(player.getPosition()).isResource()) {
+    			if(deltaY > 0) {
+    				return move(Point.DOWN,player,map);
+    			}else {
+    				return move(Point.UP,player,map);
+    			}
+    		}
     		return move(Point.LEFT,player,map);
     	}
     	if(deltaX > 0) {
+    		if(map.getTileRightOf(player.getPosition()).isResource()) {
+    			if(deltaY > 0) {
+    				return move(Point.DOWN,player,map);
+    			}else {
+    				return move(Point.UP,player,map);
+    			}
+    		}
     		return move(Point.RIGHT,player,map);
     	}
     	if(deltaY < 0) {
+    		if(map.getTileAboveOf(player.getPosition()).isResource()) {
+    			if(deltaX < 0) {
+    				return move(Point.LEFT,player,map);
+    			}else {
+    				return move(Point.RIGHT,player,map);
+    			}
+    		}
     		return move(Point.UP,player,map);
     	}
     	if( deltaY > 0) {
+    		if(map.getTileBelowOf(player.getPosition()).isResource()) {
+    			if(deltaX < 0) {
+    				return move(Point.LEFT,player,map);
+    			}else {
+    				return move(Point.RIGHT,player,map);
+    			}
+    		}
     		return move(Point.DOWN,player,map);
     	} else {
     		return null;
