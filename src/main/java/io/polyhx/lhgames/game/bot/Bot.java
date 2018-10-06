@@ -80,14 +80,30 @@ public class Bot extends BaseBot {
     }
     
     public AbstractPointAction move(Point dir,Player player,Map map) {
-    	// if vide -> walk
+    	
     	//if tree -> attack
     	//if guy -> attack
-    	Tile nextTile;
+    	Tile nextTile = map.getTileAboveOf(player.getPosition());
     	if(dir.equals(Point.UP)) {
-    		//nextTile = 
+    		nextTile = map.getTileAboveOf(player.getPosition());
+    	}else if(dir.equals(Point.DOWN)) {
+    		nextTile = map.getTileBelowOf(player.getPosition());
+
+    	}else if(dir.equals(Point.RIGHT)) {
+    		nextTile = map.getTileRightOf(player.getPosition());
+    	}else if(dir.equals(Point.LEFT)) {
+    		nextTile = map.getTileLeftOf(player.getPosition());
     	}
-    	//if()
+    	// if vide -> walk
+    	
+    	if(nextTile.isEmpty()) {
+    		return createMoveAction(dir);
+    	}
+    	
+    	// get the type of tile
+    	
+    	
+    	
     	return createMoveAction(dir);
     }
     public AbstractPointAction goToHouse(Player player,Map map) {
