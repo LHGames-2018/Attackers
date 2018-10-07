@@ -16,41 +16,63 @@ import io.polyhx.lhgames.game.tile.TileContent;
 import java.util.List;
 
 public class Bot extends BaseBot {
-	Upgrade upgradeAtt1 = Upgrade.ATTACK;
+	Upgrade upgradeAtt1 = Upgrade.COLLECTING_SPEED;
 
 	AbstractPointAction lastMove;
-	
-	
+		
+	boolean detresse = true;
+	int cmptr = 0;
 			
     public IAction getAction(Map map, Player player, List<Player> others, GameInfo info) {
         boolean full = true;
         AbstractPointAction move = createMoveAction(Point.UP);
-        
-        if(player.getTotalResource() > 15000) {
-        	if(player.getAttack() < 3) {
-        		if(player.getPosition().equals(player.getHousePosition())) {
-        			return createUpgradeAction(upgradeAtt1);
-        		}
-        	}
+        if(detresse) {
+        	Random rand = new Random();
+    		if(cmptr < 15) {
+    			cmptr++;
+    		}else {
+    			detresse = false;
+    		}
+    		int m = rand.nextInt(5);
+    		
+    		
+    		if(m == 1) {
+    			return createMoveAction(Point.UP);
+    		}else if(m == 2) {
+    			return createMoveAction(Point.DOWN);
+    		}else if(m == 3) {
+    			return createMoveAction(Point.RIGHT);
+    		}else {
+    			return createMoveAction(Point.LEFT);
+    		}
+        }else {
+        	if(player.getTotalResource() > 10000) {
+            	if(player.getCollectingSpeed() < 2.0) {
+            		if(player.getPosition().equals(player.getHousePosition())) {
+            			return createUpgradeAction(upgradeAtt1);
+            		}
+            	}
+            }
+            
+            
+            if(player.getCarriedResource() < player.getResourceCapacity()) {
+            	full = false;
+            }
+        	
+        		 if(full) {
+        	        	
+        	        	move = goToHouse(player,map);
+        	        
+        	        	
+        	        }else {
+        	        	move = goToNearestMineral(player,map);
+        	        }
+        	
+           
+        	
+        	return move;
         }
         
-        
-        if(player.getCarriedResource() < player.getResourceCapacity()) {
-        	full = false;
-        }
-    	
-    		 if(full) {
-    	        	
-    	        	move = goToHouse(player,map);
-    	        
-    	        	
-    	        }else {
-    	        	move = goToNearestMineral(player,map);
-    	        }
-    	
-       
-    	
-    	return move;
     }
     
     public AbstractPointAction goToNearestMineral(Player player, Map map) {
